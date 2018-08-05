@@ -1,0 +1,9 @@
+name: mysqldumpsplitter
+version: 0.1.0
+
+authors:
+  - Iain McNulty <iainmcnulty@gmail.com>
+
+crystal: 0.25.1
+
+license: MIT
