@@ -13,12 +13,6 @@ Usage: mysqldumpsplitter [arguments] source
 
 MESSAGE
 
-class Project
-  include Mysqldumpsplitter::OptParser
-  extend Mysqldumpsplitter::OptParser
-end
-
-
 describe Mysqldumpsplitter::OptParser do
 
   describe "no options or arguments passed to program" do
