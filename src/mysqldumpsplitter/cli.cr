@@ -1,24 +1,24 @@
-require "../opt_parser"
+require "./opt_parser"
 
 module Mysqldumpsplitter
   class Cli
     include OptParser
 
-    def parse(args)
+    def call(args)
       parse_args(args)
       args_validator(args)
+      execute(args)
     end
 
-
     def args_validator(source)
-      puts source
-      file_error = if File.exists?(source.last)
-                      puts "File '#{source.last} exists!"
-                    else
-                      STDERR.puts "File '#{source.last}' doesn't exist"
-                      exit(2)
-                    end
+      if !File.exists?(source.last)
+        STDERR.puts "File '#{source.last}' doesn't exist"
+        exit(2)
+      end
+    end
 
+    def execute(source)
+      Mysqldumpsplitter::Describe.new(File.open(source.last, "r")).call
     end
   end
 end
