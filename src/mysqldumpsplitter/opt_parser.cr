@@ -14,11 +14,15 @@ module Mysqldumpsplitter
       message = ""
       describe = false
       help = false
+      extract = false
+      extract_object = ""
+      operation = "nil"
 
       parser = OptionParser.parse(args) do |parser|
         parser.banner = "Usage: mysqldumpsplitter [arguments] source"
         parser.on("-h", "--help", "Show this help") { help = true }
         parser.on("-d", "--desc", "Describe the tables in the dump") { describe = true }
+        parser.on("-e TABLENAME", "--extract TABLENAME", "Extract TABLENAME to a file") { |tablename| extract = tablename }
         parser.invalid_option do |flag|
           invalid_options << flag
         end
@@ -43,9 +47,18 @@ module Mysqldumpsplitter
           puts parser, ""
           exit(1)
         end
-
-        args
       end
+
+      if extract_object = extract
+        operation = "extract"
+        args.unshift(extract_object.as(String))
+      end
+
+      if describe
+        operation = "describe"
+      end
+
+      args.unshift(operation)
     end
   end
 end
