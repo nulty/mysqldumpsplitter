@@ -7,10 +7,25 @@ SOURCE_MISSING_MESSAGE = "mysqldumpsplitter: source file is required\n"
 
 HELP_MESSAGE = <<-MESSAGE
 Usage: mysqldumpsplitter [arguments] source
-    -h, --help                       Show this help
-    -d, --desc                       Describe the tables in the dump
-    -e TABLENAME, --extract TABLENAME
-                                     Extract TABLENAME to a file
+    -h, --help                       Show this help.
+    -d, --desc                       Describe the tables in the dump.
+    -e OBJECT, --extract OBJECT      Extract OBJECT to a file.
+    -m NAME, --match NAME            NAME of OBJECT to be extracted.
+
+    Definitions:
+    OBJECT                           TABLE|ALLTABLES
+
+    Examples:
+
+    List the tables in the database dump
+    $ mysqldumpsplitter --desc path/to/file.sql
+
+    Extract a particular table
+    $ mysqldumpsplitter --extract TABLE --match posts path/to/file.sql
+
+    Extract all tables to individual files
+    $ mysqldumpsplitter --extract ALLTABLES path/to/file.sql
+
 
 
 MESSAGE
