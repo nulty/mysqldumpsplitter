@@ -1,4 +1,4 @@
-# mysqldumpSplitter
+# mysqldumpsplitter
 
 Inspired by Kedarvj's shell script by the same name.
 
@@ -11,7 +11,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   mysqldumpsplitter:
-    github: your-github-user/mysqldumpsplitter
+    github: nulty/mysqldumpsplitter
 ```
 
 ## Usage
@@ -22,16 +22,26 @@ require "mysqldumpsplitter"
 
 ## Build
 
-$ crystal build --release
+```crystal
+$ crystal build --release -o bin/mysqldumpsplitter
+```
 
 
 ## Development
 
-TODO: Write development instructions here
+ - Single database file
+   - [x] Describe tables
+   - [x] Extract single table
+   - [ ] Extract all tables
+   - [ ] Compression
+   - [ ] Estimate table size 
+ - Multiple Databases in one file
+   - [ ] Extract single database
+   - [ ] Extract multiple databases
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/mysqldumpsplitter/fork>)
+1. Fork it (<https://github.com/nulty/mysqldumpsplitter/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -39,4 +49,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [your-github-user](https://github.com/your-github-user) Iain McNulty - creator, maintainer
+- [nulty](https://github.com/nulty) Iain McNulty - creator, maintainer
