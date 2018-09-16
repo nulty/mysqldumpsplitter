@@ -27,7 +27,7 @@ module Mysqldumpsplitter
         break if idx > 16
         lines << line
       end
-      lines.join
+      lines.join("\n")
     end
   end
 end
