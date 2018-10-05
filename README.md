@@ -32,7 +32,7 @@ $ crystal build --release -o bin/mysqldumpsplitter
  - Single database file
    - [x] Describe tables
    - [x] Extract single table
-   - [ ] Extract all tables
+   - [x] Extract all tables
    - [ ] Compression
    - [ ] Estimate table size 
  - Multiple Databases in one file
