@@ -40,7 +40,7 @@ module Mysqldumpsplitter
     end
 
     def extract
-      Mysqldumpsplitter::Extract.new(File.open(@source, "r"), @args.first).call
+      Mysqldumpsplitter::Extract.new(File.open(@source, "r"), @args.first, @args.last).call
     end
   end
 end
