@@ -3,7 +3,7 @@ require "./../../src/mysqldumpsplitter/opt_parser.cr"
 require "process"
 
 
-SOURCE_MISSING_MESSAGE = "mysqldumpsplitter: source file is required\n"
+SOURCE_MISSING_MESSAGE = "mysqldumpsplitter: source file is required\n\n"
 
 HELP_MESSAGE = <<-MESSAGE
 Usage: mysqldumpsplitter [arguments] source
@@ -74,5 +74,22 @@ describe Mysqldumpsplitter::OptParser do
     end
   end
 
+  describe "extract option" do
+    it "extract option must be valid" do
+      value = Process.run(ExecutablePath, {"--extract WRONG", "../spec/fixtures/person_titles.sql"}) do |proc|
+        proc.error.gets_to_end
+      end
+
+      value.should eq("mysqldumpsplitter: invalid option -- --extract WRONG\n\n")
+    end
+
+    it "requires a match option to be present" do
+      value = Process.run(ExecutablePath, {"--extract=ALLTABLES", "../spec/fixtures/person_titles.sql"}) do |proc|
+        proc.error.gets_to_end
+      end
+
+      value.should match(/mysqldumpsplitter: --match option is not valid/)
+    end
+  end
 
 end
