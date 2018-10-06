@@ -29,6 +29,8 @@ $ crystal build --release -o bin/mysqldumpsplitter
 
 ## Development
 
+ **_Build the project before running tests as some tests depend on the executable_
+
  - Single database file
    - [x] Describe tables
    - [x] Extract single table
