@@ -11,6 +11,8 @@ Usage: mysqldumpsplitter [arguments] source
     -d, --desc                       Describe the tables in the dump.
     -e OBJECT, --extract OBJECT      Extract OBJECT to a file.
     -m NAME, --match NAME            NAME of OBJECT to be extracted.
+    -c COMPRESSION, --compression COMPRESSION
+                                     COMPRESSION format for output files.
 
     Definitions:
     OBJECT                           TABLE|ALLTABLES
@@ -92,4 +94,24 @@ describe Mysqldumpsplitter::OptParser do
     end
   end
 
+  describe "Compression" do
+    it "defaults to gzip compression" do
+      value = Process.run(ExecutablePath, {"--extract=TABLE", "--match=person_titles", "spec/fixtures/person_titles.sql"}) do |proc|
+        proc.output.gets_to_end
+      end
+
+      #value.should match(/mysqldumpsplitter: --match option is not valid/)
+      File.exists?("out/person_titles.sql.gz").should be_true
+    ensure
+      File.delete("out/person_titles.sql.gz")
+    end
+
+    it "exits with error if compression arg doesn't match COMPRESSIONS" do
+      value = Process.run(ExecutablePath, {"--extract=TABLE", "--match=person_titles", "--compression=fake", "spec/fixtures/person_titles.sql"}) do |proc|
+        proc.error.gets_to_end
+      end
+
+      value.should match(/mysqldumpsplitter: --compression option \"fake\" is not valid/)
+    end
+  end
 end

@@ -3,6 +3,7 @@ require "option_parser"
 module Mysqldumpsplitter
   module OptParser
     OBJECTS = %(TABLE ALLTABLES)
+    COMPRESSIONS = %(gzip none)
 
     def parse_args(args : Array(String))
 
@@ -16,6 +17,7 @@ module Mysqldumpsplitter
       object_name = ""
       operation = "nil"
       source = ""
+      compression = "gzip"
       options[:operation] = "nil"
 
       parser = OptionParser.parse(args) do |parser|
@@ -33,6 +35,16 @@ module Mysqldumpsplitter
           end
         end
         parser.on("-m NAME", "--match NAME", "NAME of OBJECT to be extracted.") { |name| object_name = name }
+        parser.on("-c COMPRESSION", "--compression COMPRESSION", "COMPRESSION format for output files.") do |format|
+
+          if COMPRESSIONS.includes?(format)
+            compression = format
+          else
+            STDERR.puts "mysqldumpsplitter: --compression option \"#{format}\" is not valid"
+            STDERR.puts parser_output(parser), ""
+            exit(1)
+          end
+        end
         parser.invalid_option do |flag|
           invalid_options << flag
         end
@@ -50,6 +62,10 @@ module Mysqldumpsplitter
         STDERR.puts "mysqldumpsplitter: source file is required", ""
         STDERR.puts parser_output(parser), ""
         exit(1)
+      end
+
+      if compression.empty?
+        compression = "gzip"
       end
 
       if help
@@ -75,6 +91,7 @@ module Mysqldumpsplitter
         options[:operation] = "extract"
         options[:name] = object_name
         options[:object] = object
+        options[:compression] = compression
       end
 
       if describe
