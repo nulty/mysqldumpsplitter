@@ -76,15 +76,15 @@ describe Mysqldumpsplitter::OptParser do
 
   describe "extract option" do
     it "extract option must be valid" do
-      value = Process.run(ExecutablePath, {"--extract WRONG", "../spec/fixtures/person_titles.sql"}) do |proc|
+      value = Process.run(ExecutablePath, {"--extract=WRONG", "../spec/fixtures/person_titles.sql"}) do |proc|
         proc.error.gets_to_end
       end
 
-      value.should eq("mysqldumpsplitter: invalid option -- --extract WRONG\n\n")
+     value.should match(/mysqldumpsplitter: --extract option \"WRONG\" is not valid/)
     end
 
-    it "requires a match option to be present" do
-      value = Process.run(ExecutablePath, {"--extract=ALLTABLES", "../spec/fixtures/person_titles.sql"}) do |proc|
+    it "requires a match option to be present when extract value is TABLE" do
+      value = Process.run(ExecutablePath, {"--extract=TABLE", "spec/fixtures/person_titles.sql"}) do |proc|
         proc.error.gets_to_end
       end
 

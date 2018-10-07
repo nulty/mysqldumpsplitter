@@ -6,14 +6,12 @@ module Mysqldumpsplitter
 
     @operation : String
     @source : String
-    @args : Array(String)
-    @parsed_args : Array(String)
+    @parsed_args : Hash(Symbol, String)
 
     def initialize(args)
       @parsed_args = parse_args(args)
-      @operation = @parsed_args.shift
-      @source = @parsed_args.pop
-      @args = @parsed_args
+      @operation = @parsed_args.fetch(:operation, "")
+      @source = @parsed_args.fetch(:source, "")
     end
 
     def call
@@ -40,7 +38,7 @@ module Mysqldumpsplitter
     end
 
     def extract
-      Mysqldumpsplitter::Extract.new(File.open(@source, "r"), @args.first, @args.last).call
+      Mysqldumpsplitter::Extract.new(File.open(@source, "r"), @parsed_args).call
     end
   end
 end

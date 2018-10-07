@@ -9,14 +9,17 @@ describe Mysqldumpsplitter::Extract do
   describe "Table" do
     it "creates the output file" do
       sql_file = File.open(path_from_root("fixtures/two_tables.sql"), "r")
-      Mysqldumpsplitter::Extract.new(sql_file, "TABLE", "posts").call
+      hash = {:object => "TABLE", :name => "posts"}
+      Mysqldumpsplitter::Extract.new(sql_file, hash).call
 
       File.exists?("out/posts.sql").should be_truthy
     end
 
     it "writes the header of the data dump" do
       sql_file = File.open(path_from_root("fixtures/two_tables.sql"), "r")
-      Mysqldumpsplitter::Extract.new(sql_file, "TABLE", "posts").call
+
+      hash = {:object => "TABLE", :name => "posts"}
+      Mysqldumpsplitter::Extract.new(sql_file, hash).call
 
       File.read("out/posts.sql").should match(/SET/)
     end
@@ -25,7 +28,8 @@ describe Mysqldumpsplitter::Extract do
     it "writes the table data into the file" do
       sql_file = File.open(path_from_root("fixtures/two_tables.sql"), "r")
 
-      Mysqldumpsplitter::Extract.new(sql_file, "TABLE", "posts").call
+      hash = {:object => "TABLE", :name => "posts"}
+      Mysqldumpsplitter::Extract.new(sql_file, hash).call
 
       File.read("out/posts.sql").should match(/DROP/)
     end
@@ -36,7 +40,8 @@ describe Mysqldumpsplitter::Extract do
 
       sql_file = File.open(path_from_root("fixtures/two_tables.sql"), "r")
 
-      Mysqldumpsplitter::Extract.new(sql_file, "ALLTABLES").call
+      hash = {:object => "ALLTABLES"}
+      Mysqldumpsplitter::Extract.new(sql_file, hash).call
 
       File.read("out/posts.sql").should match(/DROP/)
       File.read("out/users.sql").should match(/DROP/)

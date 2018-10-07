@@ -6,6 +6,7 @@ module Mysqldumpsplitter
 
     def parse_args(args : Array(String))
 
+      options = {} of Symbol => String
       invalid_options = [] of String
       message = ""
       describe = false
@@ -15,6 +16,7 @@ module Mysqldumpsplitter
       object_name = ""
       operation = "nil"
       source = ""
+      options[:operation] = "nil"
 
       parser = OptionParser.parse(args) do |parser|
         parser.banner = "Usage: mysqldumpsplitter [arguments] source"
@@ -65,21 +67,21 @@ module Mysqldumpsplitter
       end
 
       if extract
-        if object_name.blank?
+        if object == "TABLE" && object_name.blank?
           STDERR.puts "mysqldumpsplitter: --match option is not valid", ""
           STDERR.puts parser_output(parser), ""
           exit(1)
         end
-        operation = "extract"
-        args.unshift(object_name)
-        args.unshift(object)
+        options[:operation] = "extract"
+        options[:name] = object_name
+        options[:object] = object
       end
 
       if describe
-        operation = "describe"
+        options[:operation] = "describe"
       end
-
-      args.unshift(operation)
+      options[:source] = source
+      options
     end
 
     private def parser_output(parser)

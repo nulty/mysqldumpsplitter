@@ -1,6 +1,12 @@
 module Mysqldumpsplitter
   class Extract
-    def initialize(@dump_file : File, @object : String, @name : String = "")
+    @object : String
+    @name : String
+
+    def initialize(@dump_file : File, options : Hash)
+
+      @object = options.fetch(:object, "")
+      @name = options.fetch(:name, "")
     end
 
     @write_file : File | Nil
@@ -41,7 +47,12 @@ module Mysqldumpsplitter
             end
 
             table_name = line.match(/^-- Table structure for table `(.*)`/).try &.[1]
-            @write_file = new_file("out/#{table_name}.sql")
+            puts "Writing #{table_name} to a file now" if table_name
+            if table_name && !table_name.empty?
+              @write_file = new_file("out/#{table_name}.sql")
+            else
+              raise ArgumentError.new
+            end
 
             if wf = @write_file
               wf.puts(local_header)
@@ -56,7 +67,6 @@ module Mysqldumpsplitter
 
           if (wf = @write_file) && writing
             wf.puts(line)
-            wf.close if line.starts_with?("-- Dump completed")
           end
         end
       end # end case statement
