@@ -1,4 +1,4 @@
-require "gzip"
+require "compress/gzip"
 class FileWriter
 
   def initialize(@file_name : String, @compression_type : String)
@@ -12,7 +12,7 @@ class FileWriter
       end
     when /gzip/
       File.open("out/#{file_name}.sql.gz", "w") do |f|
-        Gzip::Writer.open(f) do |gzip|
+        Compress::Gzip::Writer.open(f) do |gzip|
           yield gzip
         end
       end
@@ -25,7 +25,7 @@ class FileWriter
       File.open("out/#{file_name}.sql", "w")
     when /gzip/
       f = File.new("out/#{file_name}.sql.gz", "w")
-      Gzip::Writer.new(f)
+      Compress::Gzip::Writer.new(f)
     end
   end
 end

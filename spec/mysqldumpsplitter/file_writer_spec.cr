@@ -25,7 +25,7 @@ describe "FileWriter" do
       end
 
       out = File.open("out/things.sql.gz", "r") do |f|
-        Gzip::Reader.open(f) do |gzip|
+        Compress::Gzip::Reader.open(f) do |gzip|
           gzip.gets_to_end
         end
       end

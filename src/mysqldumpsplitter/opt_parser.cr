@@ -51,7 +51,7 @@ module Mysqldumpsplitter
         parser.unknown_args do |g|
           source = begin
                      g.first
-                   rescue IndexError
+                   rescue Enumerable::EmptyError
                      ""
                    end
         end
